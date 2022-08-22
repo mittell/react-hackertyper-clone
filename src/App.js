@@ -1,8 +1,13 @@
 import './App.css';
 import { useEffect, useRef, useState } from 'react';
 
+const CHARS_PER_STOKES = 5;
+
 function App() {
 	const [sourceCode, setSourceCode] = useState('');
+	const [content, setContent] = useState('');
+	const [currentIndex, setCurrentIndex] = useState(0);
+
 	const containerRef = useRef(null);
 
 	useEffect(() => {
@@ -18,7 +23,8 @@ function App() {
 	}, []);
 
 	const typeCode = () => {
-		console.log('typing...');
+		setCurrentIndex(currentIndex + CHARS_PER_STOKES);
+		setContent(sourceCode.substring(0, currentIndex));
 	};
 
 	const removeMessage = () => {
@@ -41,7 +47,7 @@ function App() {
 				tabIndex={0}
 				ref={containerRef}
 			>
-				<div id='source'></div>
+				<div id='source'>{content}</div>
 			</div>
 		</>
 	);
