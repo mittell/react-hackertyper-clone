@@ -12,6 +12,7 @@ function App() {
 	const [isLocked, setIsLocked] = useState(false);
 
 	const containerRef = useRef(null);
+	const paragraphRef = useRef(null);
 
 	useEffect(() => {
 		containerRef.current.focus();
@@ -32,6 +33,8 @@ function App() {
 
 		setCurrentIndex(currentIndex + CHARS_PER_STOKES);
 		setContent(sourceCode.substring(0, currentIndex));
+
+		paragraphRef.current.scrollIntoView();
 
 		if (currentIndex !== 0 && currentIndex % 300 === 0) {
 			setIsLocked(true);
@@ -65,6 +68,7 @@ function App() {
 				ref={containerRef}
 			>
 				<div id='source'>{content}</div>
+				<p ref={paragraphRef}></p>
 			</div>
 			{isLocked && <Message type={messageType} />}
 		</>
