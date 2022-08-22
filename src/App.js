@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useRef, useState } from 'react';
+import Message from './components/Message';
 
 const CHARS_PER_STOKES = 5;
 
@@ -7,6 +8,8 @@ function App() {
 	const [sourceCode, setSourceCode] = useState('');
 	const [content, setContent] = useState('');
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [messageType, setMessageType] = useState('denied');
+	const [isLocked, setIsLocked] = useState(false);
 
 	const containerRef = useRef(null);
 
@@ -23,12 +26,26 @@ function App() {
 	}, []);
 
 	const typeCode = () => {
+		if (isLocked) {
+			return;
+		}
+
 		setCurrentIndex(currentIndex + CHARS_PER_STOKES);
 		setContent(sourceCode.substring(0, currentIndex));
+
+		if (currentIndex !== 0 && currentIndex % 300 === 0) {
+			setIsLocked(true);
+			setMessageType('denied');
+		}
+
+		if (currentIndex !== 0 && currentIndex % 900 === 0) {
+			setIsLocked(true);
+			setMessageType('success');
+		}
 	};
 
 	const removeMessage = () => {
-		console.log('escape!');
+		setIsLocked(false);
 	};
 
 	const keyDownHandler = (event) => {
@@ -49,6 +66,7 @@ function App() {
 			>
 				<div id='source'>{content}</div>
 			</div>
+			{isLocked && <Message type={messageType} />}
 		</>
 	);
 }
